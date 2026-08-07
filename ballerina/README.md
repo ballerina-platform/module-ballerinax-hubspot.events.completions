@@ -2,10 +2,13 @@
 
 [HubSpot](https://www.hubspot.com/) is a CRM platform that lets you track custom behavioral events for the contacts and objects in your account. The Events Send Event Completions API lets external systems report that a custom-defined event occurred, so that HubSpot workflows, reporting, and CRM timelines stay up to date with real-world activity happening outside of HubSpot.
 
-The `ballerinax/hubspot.events.completions` connector provides Ballerina bindings for the HubSpot Events Send API v3. It supports:
+The HubSpot Events Completions connector provides Ballerina bindings for the HubSpot Events Send API v3, allowing users to report custom behavioral event completions within their applications.
 
-- Sending a single custom event occurrence in real time (`sendEvent`).
-- Sending a batch of accumulated event occurrences in one call (`sendEventBatch`).
+## Key Features
+
+- Report a single custom behavioral event occurrence to HubSpot in real time
+- Submit a batch of up to 500 event occurrences in a single call
+- Authenticate using HubSpot OAuth bearer tokens, including the current Service Key flow
 
 ## Setup guide
 
