@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Events Send Event Completions",
-    "description": "Endpoint to create, delete and get behavioral event definitions",
+    "description": "Send single or batched custom behavioral event occurrences to HubSpot for existing event definitions.",
     "version": "v3",
     "x-hubspot-product-tier-requirements": {
       "marketing": "ENTERPRISE",
@@ -311,7 +311,8 @@
             "items": {
               "$ref": "#/components/schemas/EventOccurrence"
             },
-            "example": null
+            "example": null,
+            "maxItems": 500
           }
         },
         "example": null
@@ -331,12 +332,6 @@
       }
     },
     "securitySchemes": {
-      "developer_hapikey": {
-        "type": "apiKey",
-        "name": "hapikey",
-        "in": "query",
-        "description": "Legacy developer API key sent as the hapikey query parameter"
-      },
       "oauth2": {
         "type": "oauth2",
         "flows": {
@@ -349,18 +344,6 @@
             }
           }
         }
-      },
-      "private_apps": {
-        "type": "apiKey",
-        "name": "private-app",
-        "in": "header",
-        "description": "Private app access token sent in the private-app request header"
-      },
-      "private_apps_legacy": {
-        "type": "apiKey",
-        "name": "private-app-legacy",
-        "in": "header",
-        "description": "Legacy private app access token sent in the private-app-legacy header"
       }
     }
   },

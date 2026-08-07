@@ -13,7 +13,7 @@ To use this connector, you need a HubSpot access token authorized with the `anal
 
 ### Step 1: Create a Service Key
 
-HubSpot is moving single-account API access from legacy Private Apps to **Service Keys**, which get full ongoing platform support. To create one:
+HubSpot is moving single-account API access from legacy Private Apps to **Service Keys**. Service Keys are currently in **public beta** and subject to change, but are HubSpot's recommended path going forward. To create one:
 
 1. Log in to your [HubSpot account](https://app.hubspot.com/).
 2. Go to **Settings** > **Account Setup** > **Integrations** > **Service Keys**, and click **Create service key**.
@@ -29,7 +29,7 @@ HubSpot is moving single-account API access from legacy Private Apps to **Servic
 
    <img src="https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.events.completions/main/docs/setup/resources/service-keys-list.jpg" alt="Service Keys list page" width="600">
 
-> **Note:** If your account doesn't have access to the `analytics.behavioral_events.send` scope, this feature requires an **Enterprise-tier** subscription on the relevant HubSpot product. A [HubSpot developer test account](https://developers.hubspot.com/get-started) can be used to test against this API without a production Enterprise subscription.
+> **Note:** The `analytics.behavioral_events.send` scope is available to **Professional or Enterprise** HubSpot accounts. If your account doesn't have access to it, a [HubSpot developer test account](https://developers.hubspot.com/get-started) can be used to test against this API without a paid subscription.
 
 ### Step 2: Create a custom event definition
 

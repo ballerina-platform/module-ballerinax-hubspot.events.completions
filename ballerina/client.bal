@@ -19,17 +19,16 @@
 
 import ballerina/http;
 
-# Endpoint to create, delete and get behavioral event definitions
+# Send single or batched custom behavioral event occurrences to HubSpot for existing event definitions.
 public isolated client class Client {
     final http:Client clientEp;
-    final readonly & ApiKeysConfig? apiKeyConfig;
     # Gets invoked to initialize the `connector`.
     #
     # + config - The configurations to be used when initializing the `connector` 
     # + serviceUrl - URL of the target service 
     # + return - An error if connector initialization failed 
     public isolated function init(ConnectionConfig config, string serviceUrl = "https://api.hubapi.com/events/v3/send") returns error? {
-        http:ClientConfiguration httpClientConfig = {httpVersion: config.httpVersion, timeout: config.timeout, forwarded: config.forwarded, poolConfig: config.poolConfig, compression: config.compression, circuitBreaker: config.circuitBreaker, retryConfig: config.retryConfig, validation: config.validation};
+        http:ClientConfiguration httpClientConfig = {auth: config.auth, httpVersion: config.httpVersion, timeout: config.timeout, forwarded: config.forwarded, poolConfig: config.poolConfig, compression: config.compression, circuitBreaker: config.circuitBreaker, retryConfig: config.retryConfig, validation: config.validation};
         do {
             if config.http1Settings is ClientHttp1Settings {
                 ClientHttp1Settings settings = check config.http1Settings.ensureType(ClientHttp1Settings);
@@ -50,12 +49,6 @@ public isolated client class Client {
             if config.proxy is http:ProxyConfig {
                 httpClientConfig.proxy = check config.proxy.ensureType(http:ProxyConfig);
             }
-        }
-        if config.auth is ApiKeysConfig {
-            self.apiKeyConfig = (<ApiKeysConfig>config.auth).cloneReadOnly();
-        } else {
-            httpClientConfig.auth = <http:BearerTokenConfig|OAuth2RefreshTokenGrantConfig>config.auth;
-            self.apiKeyConfig = ();
         }
         http:Client httpEp = check new (serviceUrl, httpClientConfig);
         self.clientEp = httpEp;

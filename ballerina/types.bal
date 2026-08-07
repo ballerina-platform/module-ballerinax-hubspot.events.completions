@@ -17,6 +17,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/constraint;
 import ballerina/http;
 
 # Provides settings related to HTTP/1.x protocol.
@@ -47,6 +48,7 @@ public type EventOccurrence record {
 };
 
 public type BatchEventOccurrence record {
+    @constraint:Array {maxLength: 500}
     EventOccurrence[] inputs;
 };
 
@@ -70,24 +72,11 @@ public type ProxyConfig record {|
     string password = "";
 |};
 
-# Provides API key configurations needed when communicating with a remote HTTP endpoint.
-public type ApiKeysConfig record {|
-    # Legacy developer API key sent as the hapikey query parameter
-    @display {label: "", kind: "password"}
-    string hapikey;
-    # Private app access token sent in the private-app request header
-    @display {label: "", kind: "password"}
-    string private\-app;
-    # Legacy private app access token sent in the private-app-legacy header
-    @display {label: "", kind: "password"}
-    string private\-app\-legacy;
-|};
-
 # Provides a set of configurations for controlling the behaviours when communicating with a remote HTTP endpoint.
 @display {label: "Connection Config"}
 public type ConnectionConfig record {|
-    # Provides Auth configurations needed when communicating with a remote HTTP endpoint.
-    http:BearerTokenConfig|OAuth2RefreshTokenGrantConfig|ApiKeysConfig auth;
+    # Configurations related to client authentication
+    http:BearerTokenConfig|OAuth2RefreshTokenGrantConfig auth;
     # The HTTP version understood by the client
     http:HttpVersion httpVersion = http:HTTP_2_0;
     # Configurations related to HTTP/1.x protocol

@@ -4,8 +4,12 @@
 import ballerina/io;
 import ballerinax/hubspot.events.completions;
 
-// Configuration — create a Config.toml with these values before running
+// Configuration — create a Config.toml with these values before running.
+// purchaseEventName/pageViewEventName must be internal names of custom event definitions
+// that already exist in your HubSpot account (format: pe<hub-id>_<event-name>).
 configurable string accessToken = ?;
+configurable string purchaseEventName = ?;
+configurable string pageViewEventName = ?;
 
 public function main() returns error? {
     completions:Client baseClient = check new ({
@@ -14,7 +18,7 @@ public function main() returns error? {
 
     // Step 1: Send a single event the moment a customer completes a purchase.
     completions:EventOccurrence purchaseEvent = {
-        eventName: "pe1234_purchase_completed",
+        eventName: purchaseEventName,
         email: "customer@example.com",
         occurredAt: "2026-08-07T10:00:00Z",
         properties: {
@@ -29,13 +33,13 @@ public function main() returns error? {
     completions:BatchEventOccurrence pageViewBatch = {
         inputs: [
             {
-                eventName: "pe1234_page_viewed",
+                eventName: pageViewEventName,
                 email: "customer@example.com",
                 occurredAt: "2026-08-07T09:45:00Z",
                 properties: {"page": "/pricing"}
             },
             {
-                eventName: "pe1234_page_viewed",
+                eventName: pageViewEventName,
                 email: "customer@example.com",
                 occurredAt: "2026-08-07T09:50:00Z",
                 properties: {"page": "/checkout"}

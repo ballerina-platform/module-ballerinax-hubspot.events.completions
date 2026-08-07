@@ -4,23 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository state
 
-This is a **Ballerina connector for the HubSpot Events Completions API**, scaffolded from the
-`ballerina-platform` library repo template. As of now the connector has **not yet been generated**:
+This is a **Ballerina connector for the HubSpot Events Completions API**, generated from HubSpot's
+Events Send Event Completions v3 OpenAPI spec (`sendEventCompletions.json`, repo root) using the
+`ballerina-libdev:generating-connectors` skill:
 
-- `ballerina/client.bal` contains only the license header — no client code yet.
-- `sendEventCompletions.json` (untracked, repo root) is the raw HubSpot OpenAPI spec
-  ("Events Send Event Completions", v3 — send single/batch custom behavioral event occurrences)
-  that the client is meant to be generated from.
-- `README.md`, `ballerina/README.md`, `examples/README.md`, and `docs/spec/sanitations.md` are all
-  template stubs with `TODO` markers — fill these in as part of connector generation, not before.
+- `ballerina/client.bal` implements `sendEvent`/`sendEventBatch` as remote functions.
+- `ballerina/tests/` has a mock-backed test suite (`mock_service.bal`, `test.bal`).
+- `examples/track_customer_purchase_events/` demonstrates both operations together.
+- `README.md`, `ballerina/README.md`, `examples/README.md`, and `docs/spec/sanitations.md` are filled
+  in — not template stubs.
 
-If asked to build/generate the connector, use the **connector-creator** skill — do not hand-write an
-OpenAPI-to-Ballerina pipeline. The expected pipeline (mirrors `.claude/settings.local.json`) is:
+Only regenerate when the upstream OpenAPI spec changes (e.g. a new HubSpot API version); the
+`docs/spec/ai-mappings.json` file persists operationId/schema-name decisions across regenerations so
+re-running the pipeline against an unchanged spec should reuse the same names rather than re-deciding
+them.
 
-1. `bal openapi flatten -i sendEventCompletions.json -o docs/spec` (run from `ballerina/`)
-2. `bal openapi align -i docs/spec/flattened_openapi.json -o docs/spec`
-3. `bal openapi -i docs/spec/aligned_ballerina_openapi.json -o ballerina --license docs/license.txt --client-methods remote --mode client`
-4. `bal build` (in `ballerina/`)
+If asked to regenerate the connector, use the **`ballerina-libdev:generating-connectors`** skill — do
+not hand-write an OpenAPI-to-Ballerina pipeline. The expected pipeline, run from `ballerina/`, is:
+
+1. `bal openapi flatten -i ../sendEventCompletions.json -o ../docs/spec`
+2. `bal openapi align -i ../docs/spec/flattened_openapi.json -o ../docs/spec`
+3. `bal openapi -i ../docs/spec/aligned_ballerina_openapi.json -o . --license ../docs/license.txt --client-methods remote --mode client`
+4. `bal build`
 5. `bal pack` then `bal push --repository=local` (to make the module available to examples)
 6. `bal build` inside each example under `examples/`
 

@@ -36,8 +36,8 @@ function testSendEvent() returns error? {
             "amount": "100"
         }
     };
-    http:Response|error response = baseClient->sendEvent(payload);
-    test:assertTrue(response is http:Response);
+    http:Response response = check baseClient->sendEvent(payload);
+    test:assertEquals(response.statusCode, 204);
 }
 
 @test:Config {
@@ -64,6 +64,6 @@ function testSendEventBatch() returns error? {
             }
         ]
     };
-    http:Response|error response = baseClient->sendEventBatch(payload);
-    test:assertTrue(response is http:Response);
+    http:Response response = check baseClient->sendEventBatch(payload);
+    test:assertEquals(response.statusCode, 204);
 }

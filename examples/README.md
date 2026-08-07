@@ -8,30 +8,34 @@ The `ballerinax/hubspot.events.completions` connector provides practical example
 
 ## Prerequisites
 
-1. Build and push the connector to your local Ballerina repository:
+1. Build and push the connector to your local Ballerina repository (run from the repository root;
+   the parentheses run this in a subshell so your current directory doesn't change):
    ```bash
-   cd ballerina
-   bal pack && bal push --repository=local
+   (cd ballerina && bal pack && bal push --repository=local)
    ```
 
-2. For each example, create a `Config.toml` in the example directory with the required credentials:
+2. For each example, create a `Config.toml` in the example directory with the required credentials.
+   Some examples require additional configuration (e.g. HubSpot custom event tracking IDs) — see the
+   example's own README for the exact fields:
    ```toml
    accessToken = "<your-hubspot-access-token>"
    ```
 
 ## Running an example
 
-Execute the following commands to build an example from the source:
+From the repository root, enter the example's directory, then build or run it from there:
 
 * To build an example:
 
     ```bash
+    cd examples/<example-name>
     bal build
     ```
 
 * To run an example:
 
     ```bash
+    cd examples/<example-name>
     bal run
     ```
 
