@@ -2,13 +2,22 @@
 
 The `ballerinax/hubspot.events.completions` connector provides practical examples illustrating usage in various scenarios.
 
-[//]: # (TODO: Add examples)
-1. 
-2. 
+| Example | Description |
+|---------|-------------|
+| [`track_customer_purchase_events`](./track_customer_purchase_events/track_customer_purchase_events.md) | Send a single purchase event in real time, then batch-report a set of accumulated page-view events. |
 
 ## Prerequisites
 
-[//]: # (TODO: Add prerequisites)
+1. Build and push the connector to your local Ballerina repository:
+   ```bash
+   cd ballerina
+   bal pack && bal push --repository=local
+   ```
+
+2. For each example, create a `Config.toml` in the example directory with the required credentials:
+   ```toml
+   accessToken = "<your-hubspot-access-token>"
+   ```
 
 ## Running an example
 
