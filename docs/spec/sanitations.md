@@ -12,10 +12,10 @@ These changes are done in order to improve the overall usability, and as workaro
 1. The top-level API description ("Endpoint to create, delete and get behavioral event definitions")
    describes a different HubSpot API (event *definition* management) than what this spec's two
    operations actually do (report event *occurrences*). The original description is preserved
-   verbatim in `sendEventCompletions.json` (the upstream input), but corrected in the aligned spec —
-   and therefore in the generated `client.bal` doc comment — to accurately describe this API:
-   "Send single or batched custom behavioral event occurrences to HubSpot for existing event
-   definitions."
+   verbatim in the upstream spec (tracked in the organization's central OpenAPI spec repository, not
+   duplicated in this connector repo), but corrected in the aligned spec here — and therefore in the
+   generated `client.bal` doc comment — to accurately describe this API: "Send single or batched
+   custom behavioral event occurrences to HubSpot for existing event definitions."
 2. Added `maxItems: 500` to `BatchEventOccurrence.inputs` (generates a `@constraint:Array
    {maxLength: 500}` on `BatchEventOccurrence.inputs` in `types.bal`). HubSpot's batch endpoint
    (`POST /events/v3/send/batch`) enforces a hard limit of 500 event occurrences per request; the
