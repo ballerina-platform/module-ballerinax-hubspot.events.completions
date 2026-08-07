@@ -1,0 +1,365 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Events Send Event Completions",
+    "description": "Send single or batched custom behavioral event occurrences to HubSpot for existing event definitions.",
+    "version": "v3",
+    "x-hubspot-product-tier-requirements": {
+      "marketing": "ENTERPRISE",
+      "sales": "ENTERPRISE",
+      "service": "ENTERPRISE",
+      "cms": "ENTERPRISE",
+      "commerce": "ENTERPRISE",
+      "crmHub": "ENTERPRISE",
+      "dataHub": "ENTERPRISE"
+    },
+    "x-hubspot-related-documentation": [
+      {
+        "name": "Custom Events Completions Guide",
+        "url": "https://developers.hubspot.com/docs/guides/api/analytics-and-events/custom-events/custom-event-completions"
+      }
+    ]
+  },
+  "servers": [
+    {
+      "url": "https://api.hubapi.com/events/v3/send"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Basic"
+    },
+    {
+      "name": "Batch"
+    }
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "tags": [
+          "Basic"
+        ],
+        "summary": "Send a custom event occurrence",
+        "description": "Send data for a single custom event occurrence.",
+        "operationId": "sendEvent",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventOccurrence"
+              },
+              "example": null
+            }
+          },
+          "required": true,
+          "description": "Event name, contact identifier, timestamp, and custom properties for one event occurrence"
+        },
+        "responses": {
+          "204": {
+            "description": "No content",
+            "content": {}
+          },
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": null
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "analytics.behavioral_events.send"
+            ]
+          }
+        ],
+        "x-hubspot-rate-limit-exemptions": [
+          "daily",
+          "ten-secondly"
+        ]
+      }
+    },
+    "/batch": {
+      "post": {
+        "tags": [
+          "Batch"
+        ],
+        "summary": "Send a batch of event occurrences",
+        "description": "Send multiple event occurrences at once.",
+        "operationId": "sendEventBatch",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchEventOccurrence"
+              },
+              "example": null
+            }
+          },
+          "required": true,
+          "description": "A list of individual event completion requests to submit together as one batch"
+        },
+        "responses": {
+          "204": {
+            "description": "No content",
+            "content": {}
+          },
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": null
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "analytics.behavioral_events.send"
+            ]
+          }
+        ],
+        "x-hubspot-rate-limit-exemptions": [
+          "daily",
+          "ten-secondly"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorDetail": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "subCategory": {
+            "type": "string",
+            "description": "A specific category that contains more specific detail about the error",
+            "example": null
+          },
+          "code": {
+            "type": "string",
+            "description": "The status code associated with the error detail",
+            "example": null
+          },
+          "in": {
+            "type": "string",
+            "description": "The name of the field or parameter in which the error was found.",
+            "example": null
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": null
+              },
+              "example": null
+            },
+            "description": "Context about the error condition",
+            "example": "{missingScopes=[scope1, scope2]}"
+          },
+          "message": {
+            "type": "string",
+            "description": "A human readable message describing the error along with remediation steps where appropriate",
+            "example": null
+          }
+        },
+        "example": null
+      },
+      "EventOccurrence": {
+        "required": [
+          "eventName",
+          "properties"
+        ],
+        "type": "object",
+        "properties": {
+          "occurredAt": {
+            "type": "string",
+            "description": "The time when this event occurred. If this isn't set, the current time will be used.",
+            "format": "date-time",
+            "example": "2026-01-20T21:14:16.512Z"
+          },
+          "eventName": {
+            "type": "string",
+            "description": "The event's fully qualified name. This value (formatted as `pe{HubID}_{name}`) can be retrieved through the [event definitions API](https://developers.hubspot.com/docs/reference/api/analytics-and-events/custom-events/custom-event-definitions#get-%2Fevents%2Fv3%2Fevent-definitions) or in [HubSpot's UI](https://knowledge.hubspot.com/reports/create-custom-behavioral-events-with-the-code-wizard#find-internal-name).",
+            "example": null
+          },
+          "utk": {
+            "type": "string",
+            "description": "The visitor's usertoken. Used for associating the event data with a CRM record.",
+            "example": null
+          },
+          "uuid": {
+            "type": "string",
+            "description": "Include a universally unique identifier to assign a unique ID to the event occurrence. Can be useful for matching data between HubSpot and other external systems.",
+            "example": null
+          },
+          "email": {
+            "type": "string",
+            "description": "The visitor's email address. Used for associating the event data with a CRM record.",
+            "example": null
+          },
+          "objectId": {
+            "type": "string",
+            "description": "The ID of the record for which the event occurred (e.g., contact ID or visitor ID).",
+            "example": null
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "example": null
+            },
+            "description": "The event properties to update. Takes the format of key-value pairs (property internal name and property value). Learn more about [HubSpot's default event properties](https://developers.hubspot.com/docs/guides/api/analytics-and-events/custom-events/custom-event-definitions#hubspot-s-default-event-properties).",
+            "example": null
+          }
+        },
+        "example": null
+      },
+      "Error": {
+        "required": [
+          "category",
+          "correlationId",
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "subCategory": {
+            "type": "string",
+            "description": "A specific category that contains more specific detail about the error",
+            "example": null
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": null
+              },
+              "example": null
+            },
+            "description": "Context about the error condition",
+            "example": "{invalidPropertyName=[propertyValue], missingScopes=[scope1, scope2]}"
+          },
+          "correlationId": {
+            "type": "string",
+            "description": "A unique identifier for the request. Include this value with any error reports or support tickets",
+            "format": "uuid",
+            "example": "aeb5f871-7f07-4993-9211-075dc63e7cbf"
+          },
+          "links": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "example": null
+            },
+            "description": "A map of link names to associated URIs containing documentation about the error or recommended remediation steps",
+            "example": null
+          },
+          "category": {
+            "type": "string",
+            "description": "The error category",
+            "example": null
+          },
+          "message": {
+            "type": "string",
+            "description": "A human readable message describing the error along with remediation steps where appropriate",
+            "example": "An error occurred"
+          },
+          "errors": {
+            "type": "array",
+            "description": "further information about the error",
+            "items": {
+              "$ref": "#/components/schemas/ErrorDetail"
+            },
+            "example": null
+          }
+        },
+        "example": {
+          "message": "Invalid input (details will vary based on the error)",
+          "correlationId": "aeb5f871-7f07-4993-9211-075dc63e7cbf",
+          "category": "VALIDATION_ERROR",
+          "links": {
+            "knowledge-base": "https://www.hubspot.com/products/service/knowledge-base"
+          }
+        }
+      },
+      "BatchEventOccurrence": {
+        "required": [
+          "inputs"
+        ],
+        "type": "object",
+        "properties": {
+          "inputs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventOccurrence"
+            },
+            "example": null,
+            "maxItems": 500
+          }
+        },
+        "example": null
+      }
+    },
+    "responses": {
+      "Error": {
+        "description": "An error occurred.",
+        "content": {
+          "*/*": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": null
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app.hubspot.com/oauth/authorize",
+            "tokenUrl": "https://api.hubapi.com/oauth/v1/token",
+            "scopes": {
+              "analytics.behavioral_events.send": "",
+              "behavioral_events.event_definitions.read_write": ""
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-hubspot-available-client-libraries": [
+    "Node",
+    "Python",
+    "Ruby",
+    "PHP"
+  ],
+  "x-hubspot-product-tier-requirements": {
+    "marketing": "ENTERPRISE",
+    "sales": "ENTERPRISE",
+    "service": "ENTERPRISE",
+    "cms": "ENTERPRISE",
+    "commerce": "ENTERPRISE",
+    "crmHub": "ENTERPRISE",
+    "dataHub": "ENTERPRISE"
+  }
+}
